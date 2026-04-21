@@ -3,7 +3,9 @@ FROM python:3.11-slim
 WORKDIR /app
 
 RUN apt-get update && apt-get install -y \
-    curl wget git libglib2.0-0 libsm6 libxrender1 libxext6 \
+    curl wget git \
+    libglib2.0-0 libsm6 libxrender1 libxext6 \
+    libgl1 \
     poppler-utils \
     && rm -rf /var/lib/apt/lists/*
 
