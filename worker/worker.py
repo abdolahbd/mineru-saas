@@ -27,9 +27,9 @@ def handler(event):
             "mineru",
             "-p", input_path,
             "-o", output_dir,
-            "--backend", "hybrid-auto-engine"
         ]
 
+        
         result = subprocess.run(cmd, capture_output=True, text=True)
 
         if result.returncode != 0:
