@@ -27,7 +27,7 @@ def handler(event):
             "mineru",
             "-p", input_path,
             "-o", output_dir,
-            "--backend", "vlm-http-client"
+            "--backend", "pdf-extract"
         ]
 
         result = subprocess.run(cmd, capture_output=True, text=True)
