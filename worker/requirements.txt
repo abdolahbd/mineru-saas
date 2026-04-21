@@ -1,0 +1,3 @@
+runpod
+requests
+mineru[all]>=2.0.0
