@@ -14,7 +14,7 @@ def handler(event):
 
     with tempfile.TemporaryDirectory() as tmpdir:
         input_path = os.path.join(tmpdir, "input.pdf")
-        output_dir = os.path.join(tmpdir, "mineru_out")
+        output_dir = os.path.join(tmpdir, "out")
         os.makedirs(output_dir, exist_ok=True)
 
         r = requests.get(file_url, timeout=120)
@@ -27,13 +27,10 @@ def handler(event):
             "mineru",
             "-p", input_path,
             "-o", output_dir,
+            "--backend", "vlm-http-client"
         ]
 
-        result = subprocess.run(
-            cmd,
-            capture_output=True,
-            text=True
-        )
+        result = subprocess.run(cmd, capture_output=True, text=True)
 
         if result.returncode != 0:
             return {
@@ -46,20 +43,15 @@ def handler(event):
 
         if not md_files:
             return {
-                "error": "no markdown file generated",
-                "stdout": result.stdout,
-                "stderr": result.stderr,
+                "error": "no markdown found",
                 "files": list(glob.glob(os.path.join(output_dir, "**", "*"), recursive=True))
             }
 
-        md_path = md_files[0]
-
-        with open(md_path, "r", encoding="utf-8", errors="ignore") as f:
+        with open(md_files[0], "r", encoding="utf-8", errors="ignore") as f:
             markdown = f.read()
 
         return {
-            "markdown": markdown,
-            "md_path": md_path
+            "markdown": markdown[:2000]  # limit للتجربة
         }
 
 runpod.serverless.start({"handler": handler})
