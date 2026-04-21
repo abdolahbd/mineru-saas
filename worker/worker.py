@@ -27,7 +27,7 @@ def handler(event):
             "mineru",
             "-p", input_path,
             "-o", output_dir,
-            "--backend", "pdf-extract"
+            "--backend", "pipeline"
         ]
 
         result = subprocess.run(cmd, capture_output=True, text=True)
@@ -44,6 +44,8 @@ def handler(event):
         if not md_files:
             return {
                 "error": "no markdown found",
+                "stdout": result.stdout,
+                "stderr": result.stderr,
                 "files": list(glob.glob(os.path.join(output_dir, "**", "*"), recursive=True))
             }
 
@@ -51,7 +53,7 @@ def handler(event):
             markdown = f.read()
 
         return {
-            "markdown": markdown[:2000]  # limit للتجربة
+            "markdown": markdown[:4000]
         }
 
 runpod.serverless.start({"handler": handler})
